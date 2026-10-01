@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Unit Index | dgreat.guide</title>
+  <meta name="description" content="Search and filter Direct Strike unit notes and counters.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme-synthwave.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header"></header>
+
+  <main id="main" class="container">
+    <section class="section">
+      <span class="eyebrow">Unit index</span>
+      <h1 class="page-title">Every unit. Strengths, weaknesses, and what most players get wrong.</h1>
+      <p class="lede">Expand any unit card to see how it wins, how it loses, and the mistakes that make it underperform in a build.</p>
+    </section>
+
+    <section class="section tool-panel">
+      <div class="controls">
+        <div class="control-group">
+          <label for="unit-search">Search unit or role</label>
+          <input id="unit-search" type="search" placeholder="High Templar, Hydra, Liberator...">
+        </div>
+        <div class="control-group">
+          <label for="race-filter">Race</label>
+          <select id="race-filter">
+            <option>All</option><option>Zerg</option><option>Terran</option><option>Protoss</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label for="tier-filter">Tier</label>
+          <select id="tier-filter">
+            <option>All</option><option>S</option><option>A</option><option>B</option><option>C</option><option>D</option><option>F</option><option>Unknown</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label for="skill-filter">Skill level</label>
+          <select id="skill-filter">
+            <option>All</option><option>Beginner-friendly</option><option>Medium</option><option>High</option>
+          </select>
+        </div>
+      </div>
+      <div id="unit-list" class="unit-list"></div>
+    </section>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+  <script src="js/main.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/synthwave-bg.js"></script>
+  <script src="js/data-units.js"></script>
+  <script src="js/data-community-additions.js"></script>
+  <script src="js/community-data-bridge.js"></script>
+  <script src="js/unit-counter.js"></script>
+</body>
+</html>

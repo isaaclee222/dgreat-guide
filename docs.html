@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Code Docs | dgreat.guide</title>
+  <meta name="description" content="Developer documentation: pages, scripts, data schemas, admin pipeline, and conventions for dgreat.guide.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme-synthwave.css">
+  <style>
+    /* docs-only styles; no shared CSS touched */
+    .docs-anchor-nav { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+    .docs-anchor-nav a { text-decoration: none; }
+    .docs-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+    .docs-table th, .docs-table td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--line, rgba(255,255,255,.12)); vertical-align: top; }
+    .docs-table th { color: var(--muted, #9aa7b8); font-weight: 700; }
+    .docs-table code, .docs-inline code { background: rgba(255,255,255,.07); padding: .1em .35em; border-radius: 6px; font-size: .9em; }
+    pre.docs-code { background: rgba(0,0,0,.45); border: 1px solid var(--line, rgba(255,255,255,.12)); border-radius: 12px; padding: .9rem 1rem; overflow-x: auto; font-size: .82rem; line-height: 1.45; }
+    .docs-section h2 { scroll-margin-top: 90px; }
+    .docs-flow { display: grid; gap: .4rem; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header"></header>
+
+  <main id="main" class="container docs-inline">
+    <section class="section">
+      <span class="eyebrow">Developer documentation</span>
+      <h1 class="page-title">Code index.</h1>
+      <p class="lede">Static HTML/CSS/vanilla JS + Netlify Functions/Blobs. No build step. Full version for editors: <code>DOCS_INDEX.md</code> in the repo root.</p>
+      <nav class="docs-anchor-nav" aria-label="Documentation sections">
+        <a class="badge" href="#pages">1 · Pages &amp; routing</a>
+        <a class="badge" href="#scripts">2 · Scripts &amp; load order</a>
+        <a class="badge" href="#schemas">3 · Data schemas</a>
+        <a class="badge" href="#pipeline">4 · Admin pipeline</a>
+        <a class="badge" href="#conventions">5 · Conventions</a>
+      </nav>
+    </section>
+
+    <section class="section docs-section" id="pages">
+      <div class="section-header"><div>
+        <span class="eyebrow">Section 1</span>
+        <h2>Pages &amp; routing</h2>
+        <p class="section-intro">visit-router.js (index.html only) redirects first-time visitors to start.html and returning visitors straight to matchup-helper.html with their saved race. The DG logo uses index.html?home=1 to bypass it. That makes matchup-helper.html the de facto main page.</p>
+      </div></div>
+      <div class="card">
+        <table class="docs-table">
+          <tr><th>Page</th><th>Role</th><th>Page script</th></tr>
+          <tr><td><code>index.html</code></td><td>Marketing homepage: hero, race quick-start, tool cards, noob-trap detector. Mostly bypassed by the router.</td><td>main.js only</td></tr>
+          <tr><td><code>start.html</code></td><td>First-visit funnel: experience + race pickers → saves profile → jumps to the helper.</td><td>start.js</td></tr>
+          <tr><td><code>matchup-helper.html</code></td><td><strong>The main tool.</strong> Desktop split: left 1/3 strategy spotlight sidebar, right 2/3 helper (race/position form, matchup primer, priority threat deck, response arena, worst-build widget).</td><td>matchup-helper.js, strategy-spotlight.js, worst-builds.js</td></tr>
+          <tr><td><code>tier-list.html</code></td><td>Tier board filtered by race and early/late phase.</td><td>tier-list.js</td></tr>
+          <tr><td><code>unit-counter.html</code></td><td>Searchable unit index with expandable cards.</td><td>unit-counter.js</td></tr>
+          <tr><td><code>strategy-database.html</code></td><td>Community guides with race/category/search filters.</td><td>strategy-database.js</td></tr>
+          <tr><td><code>tvt-trainer.html</code> / <code>pvp-trainer.html</code></td><td>Mirror-matchup pages. <code>&lt;body data-race-guide-page="tvt|pvp"&gt;</code> selects sections from DSA_RACE_GUIDES; supports embedded quizzes.</td><td>race-guides-page.js</td></tr>
+          <tr><td><code>gas-trainer.html</code></td><td>Yes/No gas-timing quiz.</td><td>gas-trainer.js</td></tr>
+          <tr><td><code>zvz-trainer.html</code></td><td>ZvZ lesson + multiple-choice quiz.</td><td>zvz-trainer.js</td></tr>
+          <tr><td><code>wave-function.html</code></td><td>Wave math lab; mounts the canvas animation.</td><td>wave-animation.js + wave-function-page.js</td></tr>
+          <tr><td><code>wave-animation.html</code></td><td>Standalone canvas demo, own inline CSS, outside site nav.</td><td>inline</td></tr>
+          <tr><td><code>beginner.html</code> / <code>glossary.html</code> / <code>meta.html</code></td><td>Lessons, glossary, and current-meta writeup rendered by main.js.</td><td>main.js only</td></tr>
+          <tr><td><code>admin.html</code></td><td>Editor panel: login, patches/additions for every dataset, worst-build moderation, exports.</td><td>admin.js</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="section docs-section" id="scripts">
+      <div class="section-header"><div>
+        <span class="eyebrow">Section 2</span>
+        <h2>Scripts, globals &amp; load order</h2>
+        <p class="section-intro">The bridge mutates the DSA_* globals in place, so everything reading them must load after it. data-strategy-guides.js uses ||-guards, so it must load before the bridge or its seed data is skipped.</p>
+      </div></div>
+      <pre class="docs-code">main.js → data files (data-units.js, data-matchups.js, data-tierlist.js, data-strategy-guides.js, …)
+        → data-community-additions.js → community-data-bridge.js → page scripts</pre>
+      <div class="card-grid">
+        <article class="card">
+          <h3>main.js</h3>
+          <p>Defines <code>window.DSA</code>: escapeHTML, raceClass, tierClass, label, renderList, filled, navItems, toolCards, noobTraps, beginnerLessons, glossaryEntries. Renders nav, footer, settings panel, tool cards, noob-trap detector, lessons, glossary.</p>
+        </article>
+        <article class="card">
+          <h3>community-data-bridge.js</h3>
+          <p>Merges shipped snapshot ⊕ server cache ⊕ local patches, then <strong>overwrites</strong> DSA_THREAT_RESPONSES, DSA_GENERAL_MATCHUPS, DSA_TIERLIST, DSA_UNITS, DSA_STRATEGY_GUIDES, DSA_RACE_GUIDES, DSA_WORST_BUILDS, DSA_ADMIN_USERS. Exposes DSA_APPLY_COMMUNITY_ADDITIONS, DSA_GET_COMMUNITY_DATA, DSA_FORCE_PUBLIC_BACKEND_SYNC.</p>
+        </article>
+        <article class="card">
+          <h3>Data files (no DOM)</h3>
+          <p>data-matchups.js → DSA_GENERAL_MATCHUPS / DSA_THREAT_RESPONSES / DSA_THREAT_SORTING / DSA_ALL_THREAT_UNITS. data-units.js → DSA_UNITS. data-tierlist.js → DSA_TIERLIST. data-strategy-guides.js → DSA_STRATEGY_GUIDES + DSA_RACE_GUIDES. data-quizzes.js → DSA_GAS_SCENARIOS + DSA_ZVZ_SCENARIOS. data-admin-schema.js / data-admin-users.js → admin dropdowns and login hints.</p>
+        </article>
+        <article class="card">
+          <h3>matchup-helper.js</h3>
+          <p>Filters threats by myRace / enemyRace / positionContext, hides rows without a useful response, sorts by sortScore. Exposes <code>DSA_MATCHUP_HELPER_REFRESH()</code>; listens to community events and cross-tab storage changes. Reads ?race= / ?enemy= URL params.</p>
+        </article>
+        <article class="card">
+          <h3>strategy-spotlight.js + worst-builds.js</h3>
+          <p>Sidebar spotlight: 3 random guides for the selected race, enemy-relevant first, shuffle button. Worst builds: one fetch of /api/admin/worst-builds, rotating top-3 card, submit/vote modal, static DSA_WORST_BUILDS fallback.</p>
+        </article>
+        <article class="card">
+          <h3>Other page scripts</h3>
+          <p>start.js (funnel), tier-list.js, unit-counter.js, strategy-database.js, race-guides-page.js, gas-trainer.js, zvz-trainer.js, wave-animation.js (<code>mountWaveAnimation()</code>), wave-function-page.js, admin.js (full panel, Bearer-token API calls), visit-router.js (redirect only).</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section docs-section" id="schemas">
+      <div class="section-header"><div>
+        <span class="eyebrow">Section 3</span>
+        <h2>Data schemas</h2>
+        <p class="section-intro">Generated from the fill-in xlsx workbook. Blank cells are supported everywhere: rows without content render "Not filled yet." or are hidden via hasResponse.</p>
+      </div></div>
+      <div class="card">
+        <h3>DSA_THREAT_RESPONSES — the helper's core dataset</h3>
+        <p>Key fields: <code>enemyThreat</code>, <code>unitRace</code> (threat's race), <code>myRace</code>, <code>enemyRaceContext</code>/<code>positionContext</code> ('Any' or specific), <code>priority</code>, <code>skillCap</code>, <code>counterUnits[]</code> (first 3 shown), <code>responseText</code>, <code>scoutTiming</code>, <code>responseTiming</code>, <code>avoid[]</code>, <code>warning</code>, <code>notes</code>, <code>hasResponse</code>, <code>sortScore</code> (ordering), <code>importance</code>.</p>
+        <pre class="docs-code">{ "id": "lurker__zerg", "enemyThreat": "Lurker", "unitRace": "Zerg", "myRace": "Zerg",
+  "enemyRaceContext": "Any", "positionContext": "Any", "skillCap": "High", "priority": "Critical",
+  "counterUnits": ["Corruptor", "Lurker", "Queen"],
+  "responseText": "One of the main zerg mechanics is whoever has more lurkers wins...",
+  "warning": "Don't build if your team is actively losing air...",
+  "hasResponse": true, "sortScore": 220, "importance": "Critical" }</pre>
+      </div>
+      <div class="card">
+        <h3>DSA_GENERAL_MATCHUPS</h3>
+        <p>One row per myRace × enemyRace × position (27 rows): <code>title</code>, <code>overview</code>, <code>priorities[]</code>, <code>positionNote</code>, <code>confidence</code>.</p>
+      </div>
+      <div class="card">
+        <h3>DSA_UNITS &amp; DSA_TIERLIST</h3>
+        <p>Units: <code>name</code>, <code>slug</code>, <code>image</code>, <code>race</code>, <code>tier</code>/<code>earlyTier</code>/<code>lateTier</code>/<code>oldTier</code>/<code>newTier</code>, <code>role</code>, <code>summary</code>, <code>skillLevel</code>, <code>strongAgainst[]</code>, <code>weakAgainst[]</code>, <code>commonMistake</code>, <code>beginnerWarning</code>. Tier list mirrors the same units with <code>unit</code>, <code>notes</code>, <code>confidence</code>.</p>
+      </div>
+      <div class="card">
+        <h3>DSA_STRATEGY_GUIDES &amp; DSA_RACE_GUIDES</h3>
+        <p>Guides: <code>id</code>, <code>title</code>, <code>race</code> (or 'Any'), <code>matchup</code>, <code>category</code>, <code>summary</code>, <code>body</code>, <code>tags[]</code>, <code>author</code>, <code>updatedAt</code>. Race-page sections add <code>page</code> ('tvt'|'pvp'), <code>order</code>, <code>keyPoints[]</code>, <code>commonMistakes[]</code>, optional <code>quizQuestions[]</code> (max 3).</p>
+      </div>
+      <div class="card">
+        <h3>Quizzes</h3>
+        <p>DSA_GAS_SCENARIOS: <code>{ title, prompt, correct: 'Yes'|'No', explanation }</code>. DSA_ZVZ_SCENARIOS: <code>{ title, prompt, options[], correct, explanation }</code>. Plain objects so non-programmers can edit.</p>
+      </div>
+      <div class="card">
+        <h3>Community store envelope (DSA_COMMUNITY_ADDITIONS)</h3>
+        <pre class="docs-code">{ "version": 6, "generatedAt": "ISO", "generatedBy": "isaac",
+  "changelog": [{ changeId, timestamp, editorId, editorName, editorRole, scopeRace, dataset, action, target, note }],
+  "users":     { "patches": [], "deleted": [] },
+  "patches":   { "threatResponses": [{ targetName, after: {...} }], "tierList": [], "units": [], "generalMatchups": [] },
+  "additions": { "threatResponses": [], "communityGuides": [], "feedback": [], "raceGuides": [], "worstBuilds": [] } }</pre>
+        <p>patches update existing rows by compound key (threat: myRace|enemyRaceContext|positionContext|enemyThreat); additions are append-only, deduped by id. Worst builds carry <code>votes: { up, down }</code> and sort by net votes.</p>
+      </div>
+    </section>
+
+    <section class="section docs-section" id="pipeline">
+      <div class="section-header"><div>
+        <span class="eyebrow">Section 4</span>
+        <h2>Admin / community pipeline</h2>
+        <p class="section-intro">Admin saves go to Netlify Blobs through serverless functions; public pages run on the shipped static snapshot plus a throttled hourly sync.</p>
+      </div></div>
+      <pre class="docs-code">admin.html (admin.js)
+  → POST /api/admin/auth   (server-checked password, token in DSA_ADMIN_SESSION_V3)
+  → POST /api/admin/change (writes Netlify Blobs) + mirror to localStorage DSA_COMMUNITY_PATCHES_V3
+
+public page load:
+  data files → data-community-additions.js (shipped snapshot)
+  → community-data-bridge.js: merge shipped ⊕ server cache ⊕ local patches
+      → overwrite DSA_* globals → event 'dsa-community-data-ready'
+  → GET /api/admin/public (≤ once/hour/browser)
+      → re-apply → event 'dsa-community-server-data-ready'
+refresh hooks: pages listen to both events; the helper also exposes
+  DSA_MATCHUP_HELPER_REFRESH() and watches cross-tab 'storage' changes.</pre>
+      <div class="card-grid">
+        <article class="card">
+          <h3>Netlify function routes</h3>
+          <p><code>netlify/functions/dsa-admin.mjs</code> (esbuild, @netlify/blobs): GET /api/admin/public · POST /auth · GET /state · POST /change · POST /users · GET /login-users · GET /export-js | export-json | export-md · POST /clear · GET /worst-builds · POST /worst-builds/submit · POST /worst-builds/vote.</p>
+        </article>
+        <article class="card">
+          <h3>Permissions</h3>
+          <p>Enforced server-side: owner (all), race-editor (own race's threat/tier/guides; Terran→tvt and Protoss→pvp pages only), reviewer (guides + feedback). Env vars: DSA_OWNER_PASSWORD_HASH (npm run hash:password), DSA_SESSION_SECRET.</p>
+        </article>
+        <article class="card">
+          <h3>Throttle / low-credit mode</h3>
+          <p>Public sync ≤ 1×/hour per browser. Force: <code>?syncCommunity=1</code>. Disable: localStorage DSA_DISABLE_PUBLIC_BACKEND_SYNC='true'. Cheapest publish: export data-community-additions.js from admin and redeploy the static file. Details: NETLIFY_*.md in repo root.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section docs-section" id="conventions">
+      <div class="section-header"><div>
+        <span class="eyebrow">Section 5</span>
+        <h2>Conventions</h2>
+      </div></div>
+      <div class="card-grid">
+        <article class="card">
+          <h3>Escaping</h3>
+          <p>Every user/data string goes through <code>DSA.escapeHTML</code> (page scripts alias it as <code>esc()</code> with a local fallback). Never interpolate raw data into innerHTML.</p>
+        </article>
+        <article class="card">
+          <h3>Unit images</h3>
+          <p><code>slug(name)</code> → <code>assets/units/&lt;slug&gt;.png</code> with onerror fallback to <code>assets/units/unknown.png</code>. matchup-helper.js adds typo aliases (pheonix→phoenix, mutalisk→muta, sigetank→siege-tank…).</p>
+        </article>
+        <article class="card">
+          <h3>Badge classes</h3>
+          <p>Races: <code>race-zerg / race-terran / race-protoss</code>. Tiers: <code>tier-s…tier-f</code>. Priority: <code>priority-critical / high / medium / low</code>. Skill: <code>skill-very-high / high / medium / low</code>.</p>
+        </article>
+        <article class="card">
+          <h3>Layout</h3>
+          <p><code>--max</code> CSS var controls page width (1180px default; <code>body.matchup-wide</code> → 1520px). <code>.matchup-layout</code> = grid minmax(280px,1fr) / minmax(0,2fr); sidebar sticky, hidden under 1100px. The container::before background gradient also keys off --max.</p>
+        </article>
+        <article class="card">
+          <h3>Empty data</h3>
+          <p>Blank workbook cells are normal: render "Not filled yet." via <code>DSA.filled</code>, or hide rows via <code>hasResponse</code>. Pages must tolerate missing fields.</p>
+        </article>
+        <article class="card">
+          <h3>localStorage keys</h3>
+          <p>dsaHasVisited, dsaVisitorProfileComplete, dsaRace, dsaExperience, dsaBackgroundImage, dsaVotes|…, dsa-gas-score, DSA_TVT/PVP_QUIZ_SCORES, DSA_COMMUNITY_PATCHES_V3, DSA_SERVER_COMMUNITY_CACHE_V1(+_TS_), DSA_ADMIN_SESSION_V3, DSA_WORST_BUILD_VOTES_V1, DSA_DISABLE/ENABLE_PUBLIC_BACKEND_SYNC.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+  <script src="js/main.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/synthwave-bg.js"></script>
+</body>
+</html>

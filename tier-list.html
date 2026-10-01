@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tier List | dgreat.guide</title>
+  <meta name="description" content="Interactive race and phase tier list for Direct Strike units.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme-synthwave.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header"></header>
+
+  <main id="main" class="container">
+    <section class="section">
+      <span class="eyebrow">Tier list</span>
+      <h1 class="page-title">Unit strength by race and phase.</h1>
+      <p class="lede">Switch race and game phase. The board updates. Units that are strong early are not always strong late.</p>
+    </section>
+
+    <section class="section tool-panel">
+      <div class="tier-controls">
+        <div>
+          <label>Race</label>
+          <div class="segmented-control" id="tier-race-controls"></div>
+        </div>
+        <div>
+          <label>Game phase</label>
+          <div class="segmented-control" id="tier-phase-controls"></div>
+        </div>
+        <div class="control-group">
+          <label for="tier-search">Search</label>
+          <input id="tier-search" type="search" placeholder="Hydra, HT, Liberator...">
+        </div>
+      </div>
+      <div id="tier-summary" class="card-conditional"></div>
+      <div id="tier-board" class="tier-board"></div>
+      <div id="tier-notes" class="tier-notes"></div>
+    </section>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+  <script src="js/main.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/synthwave-bg.js"></script>
+  <script src="js/data-units.js"></script>
+  <script src="js/data-tierlist.js"></script>
+  <script src="js/data-community-additions.js"></script>
+  <script src="js/community-data-bridge.js"></script>
+  <script src="js/tier-list.js"></script>
+</body>
+</html>

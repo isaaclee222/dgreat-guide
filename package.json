@@ -1,0 +1,16 @@
+{
+  "name": "direct-strike-academy",
+  "version": "9.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "netlify dev",
+    "hash:password": "node scripts/hash-password.mjs"
+  },
+  "dependencies": {
+    "@netlify/blobs": "latest"
+  },
+  "devDependencies": {
+    "netlify-cli": "latest"
+  }
+}

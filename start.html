@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Start | dgreat.guide Direct Strike</title>
+  <meta name="description" content="Pick your Direct Strike experience level and race, then jump into the best counter tool or beginner path.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme-synthwave.css">
+</head>
+<body class="onboarding-body">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header"></header>
+
+  <main id="main" class="onboarding-page">
+    <section class="identity-hero" aria-labelledby="identity-title">
+      <div class="ambient-grid" aria-hidden="true"></div>
+
+      <div class="identity-copy">
+        <span class="eyebrow">Direct Strike Academy</span>
+        <p class="pain-line" id="pain-line">Keep getting rolled in Wave 3?</p>
+        <h1 id="identity-title">How deep are you at Direct Strike?</h1>
+        <p class="lede">Pick your depth, then click your race. You will jump straight into the Matchup Helper with your race remembered.</p>
+      </div>
+
+      <div class="experience-grid" id="experience-grid" aria-label="Choose your experience level">
+        <button class="experience-card" type="button" data-experience="beginner">
+          <span>🐣</span>
+          <strong>Still figuring it out</strong>
+          <em>Show me safer counters first.</em>
+        </button>
+        <button class="experience-card" type="button" data-experience="lane">
+          <span>⚔️</span>
+          <strong>I know matchups, still losing lanes</strong>
+          <em>Take me to practical answers.</em>
+        </button>
+        <button class="experience-card" type="button" data-experience="edge">
+          <span>🔥</span>
+          <strong>I need the edge cases</strong>
+          <em>Surface the weird stuff first.</em>
+        </button>
+      </div>
+
+      <section class="race-draft" id="race-draft" aria-label="Choose your race">
+        <div class="race-draft-header">
+          <div>
+            <span class="eyebrow">Pick your race</span>
+            <h2>Click a race to open the Matchup Helper.</h2>
+          </div>
+          <div class="selected-race-anchor" id="selected-race-anchor" aria-live="polite"></div>
+        </div>
+
+        <div class="race-portrait-grid">
+          <button class="race-portrait race-terran" type="button" data-race="Terran" aria-label="Choose Terran">
+            <span class="race-sigil">T</span>
+            <small>Terran</small>
+          </button>
+          <button class="race-portrait race-zerg" type="button" data-race="Zerg" aria-label="Choose Zerg">
+            <span class="race-sigil">Z</span>
+            <small>Zerg</small>
+          </button>
+          <button class="race-portrait race-protoss" type="button" data-race="Protoss" aria-label="Choose Protoss">
+            <span class="race-sigil">P</span>
+            <small>Protoss</small>
+          </button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer id="site-footer" class="site-footer"></footer>
+  <script src="js/main.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/synthwave-bg.js"></script>
+  <script src="js/data-units.js"></script>
+  <script src="js/data-matchups.js"></script>
+  <script src="js/data-community-additions.js"></script>
+  <script src="js/community-data-bridge.js"></script>
+  <script src="js/start.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Matchup Helper | dgreat.guide</title>
+  <meta name="description" content="Race, position, and threat based recommendation helper for Direct Strike.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme-synthwave.css">
+</head>
+<body class="matchup-wide">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header"></header>
+
+  <main id="main" class="container">
+    <div class="matchup-layout">
+      <aside class="matchup-sidebar" aria-label="Strategy spotlight">
+        <div id="strategy-spotlight" class="strategy-spotlight"></div>
+      </aside>
+
+      <div class="matchup-main">
+    <section class="section tool-panel">
+      <form id="matchup-context-form" class="matchup-top-grid">
+        <div class="matchup-start-guide" aria-hidden="true">
+          <span class="start-here-bubble">Start here</span>
+          <img src="assets/red-arrow-curved-5.png" alt="">
+        </div>
+        <div class="control-group">
+          <label for="my-race">My race</label>
+          <select id="my-race"><option>Zerg</option><option>Terran</option><option>Protoss</option></select>
+        </div>
+        <div class="control-group">
+          <label for="enemy-race">Enemy race</label>
+          <select id="enemy-race"><option>Zerg</option><option>Terran</option><option>Protoss</option></select>
+        </div>
+      </form>
+      <div id="general-results" class="matchup-context"></div>
+      <button id="baseline-reopen" class="button-secondary baseline-reopen" type="button" aria-controls="general-results" hidden>Show baseline</button>
+
+      <div class="threat-panel">
+        <div class="section-header">
+          <div>
+            <h2>Enemy threat quick response</h2>
+            <p class="section-intro">Only filled responses for the selected races appear. The priority deck surfaces the threats most likely to decide the wave.</p>
+          </div>
+        </div>
+        <div id="priority-threats" class="priority-threat-grid"></div>
+        <form id="threat-form" class="threat-form">
+          <div class="control-group">
+            <label for="enemy-threat">Enemy threat unit</label>
+            <select id="enemy-threat"></select>
+          </div>
+          <button class="button-primary" type="submit">Get threat response</button>
+        </form>
+        <div id="threat-results"></div>
+      </div>
+    </section>
+
+    <section class="section worst-build-section" aria-labelledby="worst-build-title">
+      <div id="worst-build-widget" class="worst-build-widget">
+        <div class="worst-build-copy">
+          <span class="eyebrow">Worst build of the week</span>
+          <h2 id="worst-build-title">What not to donate minerals into.</h2>
+          <p class="section-intro">Community submissions rotate through the top 3 voted disasters. Vote or add the build that made your team ask questions.</p>
+        </div>
+        <div id="worst-build-card" class="worst-build-card">Loading worst builds...</div>
+        <div class="button-row">
+          <button id="worst-build-open" class="button-secondary" type="button">Submit / vote</button>
+        </div>
+      </div>
+    </section>
+      </div>
+    </div>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+  <script src="js/main.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/synthwave-bg.js"></script>
+  <script src="js/data-units.js"></script>
+  <script src="js/data-matchups.js"></script>
+  <script src="js/data-strategy-guides.js"></script>
+  <script src="js/data-community-additions.js"></script>
+  <script src="js/community-data-bridge.js"></script>
+  <script src="js/worst-builds.js"></script>
+  <script src="js/data-unit-costs.js"></script>
+  <script src="js/data-scenarios.js"></script>
+  <script src="js/scenario-theater.js"></script>
+  <script src="js/strategy-spotlight.js"></script>
+  <script src="js/matchup-helper.js"></script>
+</body>
+</html>

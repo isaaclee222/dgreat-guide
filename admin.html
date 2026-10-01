@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin | Direct Strike Academy</title>
+  <meta name="description" content="Trusted editor admin panel for Direct Strike Academy live strategy data.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body.admin-body { background: #070a11; }
+    .admin-shell { max-width: 1420px; margin: 0 auto; padding: 1rem; }
+    .admin-top { display:grid; grid-template-columns: 1.1fr .9fr; gap:1rem; align-items:stretch; margin: 1rem 0; }
+    .admin-card { border:1px solid var(--line); border-radius: 22px; background: rgba(12,18,30,.94); box-shadow: var(--shadow); padding: clamp(1rem, 2vw, 1.35rem); }
+    .admin-card h1,.admin-card h2,.admin-card h3{margin-top:0;line-height:1.1}
+    .admin-card h2 { font-size: clamp(1.35rem,2.2vw,2rem); }
+    .admin-grid { display:grid; grid-template-columns: 280px minmax(0,1fr) 370px; gap:1rem; align-items:start; }
+    .admin-nav { position: sticky; top: 84px; display:grid; gap:.55rem; }
+    .admin-nav button { text-align:left; border:1px solid var(--line); color:var(--text); background: rgba(255,255,255,.045); border-radius: 14px; padding:.78rem .9rem; }
+    .admin-nav button.active { border-color: rgba(34,211,238,.55); background: rgba(34,211,238,.12); }
+    .admin-panel { display:none; }
+    .admin-panel.active { display:block; }
+    .form-grid { display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:.85rem; }
+    .form-grid.three { grid-template-columns: repeat(3,minmax(0,1fr)); }
+    .form-grid.four { grid-template-columns: repeat(4,minmax(0,1fr)); }
+    .form-grid label, .admin-form label { display:grid; gap:.35rem; color: var(--muted); font-weight:700; font-size:.88rem; }
+    .admin-form input,.admin-form select,.admin-form textarea,.admin-card input,.admin-card select,.admin-card textarea { width:100%; border:1px solid rgba(255,255,255,.14); border-radius:12px; background:#090e18; color:var(--text); padding:.72rem .78rem; }
+    .admin-form select,.admin-card select { color:#eaf6ff; background-color:#090e18; color-scheme:dark; appearance:auto; }
+    .admin-form select option,.admin-card select option,.admin-form select optgroup,.admin-card select optgroup { color:#eaf6ff !important; background-color:#090e18 !important; }
+    .admin-form select option:checked,.admin-card select option:checked { color:#fff !important; background-color:#0f6f8f !important; }
+    .admin-form textarea { min-height: 108px; resize: vertical; }
+    .wide { grid-column: 1 / -1; }
+    .button-row { display:flex; flex-wrap:wrap; gap:.7rem; margin-top:1rem; align-items:center; }
+    .admin-button { border:1px solid rgba(34,211,238,.38); background: rgba(34,211,238,.12); color: var(--text); border-radius: 999px; padding:.72rem 1rem; font-weight:850; }
+    .admin-button.danger { border-color: rgba(255,107,107,.5); background: rgba(255,107,107,.11); }
+    .admin-button.success { border-color: rgba(57,217,138,.5); background: rgba(57,217,138,.12); }
+    .admin-button.ghost { border-color: var(--line); background: rgba(255,255,255,.04); }
+    .locked .requires-login { opacity:.45; pointer-events:none; filter: grayscale(.3); }
+    .hidden { display:none !important; }
+    .mini { color:var(--muted); font-size:.88rem; line-height:1.45; }
+    .role-banner { border:1px solid rgba(34,211,238,.22); background:rgba(34,211,238,.08); border-radius:16px; padding:.85rem; }
+    .pill-row { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.65rem; }
+    .pill { border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06); color:var(--muted); border-radius:999px; padding:.28rem .55rem; font-size:.78rem; }
+    .permission-checks { display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:.45rem; margin-top:.55rem; }
+    .permission-checks label { display:flex; align-items:center; gap:.45rem; background:rgba(255,255,255,.045); border:1px solid var(--line); padding:.5rem; border-radius:10px; color:var(--text); font-size:.84rem; }
+    .permission-checks input { width:auto; }
+    .admin-preview { position: sticky; top:84px; display:grid; gap:1rem; }
+    .changelog-list, .admin-list { display:grid; gap:.55rem; max-height: 560px; overflow:auto; padding-right:.25rem; }
+    .change-row, .admin-list-row { border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.045); border-radius:14px; padding:.72rem; }
+    .change-row strong, .admin-list-row strong { display:block; }
+    .change-row span, .admin-list-row span { color:var(--muted); font-size:.84rem; }
+    .live-preview-box { border:1px dashed rgba(34,211,238,.32); border-radius:16px; padding:.85rem; background:rgba(34,211,238,.045); }
+    .save-strip { display:flex; gap:.65rem; flex-wrap:wrap; align-items:center; border-top:1px solid var(--line); padding-top:1rem; margin-top:1rem; }
+    .toast { position:fixed; right:1rem; bottom:1rem; z-index:500; background:#061018; border:1px solid rgba(34,211,238,.45); color:var(--text); border-radius:15px; padding:.85rem 1rem; box-shadow:var(--shadow); transform:translateY(140%); transition:.2s; max-width:min(420px, calc(100vw - 2rem)); }
+    .toast.show { transform:translateY(0); }
+    .user-list { display:grid; gap:.55rem; }
+    .user-row { display:flex; justify-content:space-between; gap:.7rem; align-items:center; border:1px solid rgba(255,255,255,.1); padding:.65rem; border-radius:14px; }
+    .user-row em { color:var(--muted); font-style:normal; font-size:.82rem; }
+    .scope-lock { border-left:3px solid var(--cyan); padding-left:.75rem; color:var(--muted); }
+    .editor-picker { display:grid; grid-template-columns: 1fr 1fr; gap:.6rem; }
+    .quiz-admin-grid { display:grid; gap:.8rem; margin-top:.8rem; }
+    .quiz-admin-card { border:1px solid rgba(255,255,255,.1); border-radius:16px; padding:.8rem; background:rgba(255,255,255,.035); }
+    .quiz-answer-grid { display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:.55rem; }
+    .editor-help-card { border:1px solid rgba(57,217,138,.22); background:rgba(57,217,138,.07); border-radius:16px; padding:.8rem; margin-bottom:1rem; }
+    @media (max-width: 1160px){ .admin-grid{grid-template-columns:1fr}.admin-nav,.admin-preview{position:static}.admin-nav{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-top{grid-template-columns:1fr} }
+    @media (max-width: 760px){ .admin-shell{padding:.65rem}.form-grid,.form-grid.three,.form-grid.four,.permission-checks,.admin-nav,.editor-picker,.quiz-answer-grid{grid-template-columns:1fr}.admin-card{border-radius:16px}.button-row .admin-button,.save-strip .admin-button{width:100%;}.user-row{align-items:flex-start;flex-direction:column} }
+  </style>
+</head>
+<body class="admin-body locked">
+  <a class="skip-link" href="#admin-main">Skip to admin content</a>
+  <header id="site-header" class="site-header"></header>
+  <main id="admin-main" class="admin-shell">
+    <section class="admin-top">
+      <div class="admin-card">
+        <span class="eyebrow">Trusted editor panel</span>
+        <h1>Direct Strike Academy Admin</h1>
+        <p class="lede-small">Pick an existing strategy, edit the filled boxes, leave a short change note, and save. The live site reads the backend data without changing the core data-file format.</p>
+      </div>
+      <div class="admin-card">
+        <div id="login-form-wrap">
+          <h2>Login</h2>
+          <div class="editor-picker">
+            <label>Known editors<select id="editor-select"></select></label>
+            <label>Editor ID<input id="editor-id" list="editor-id-list" placeholder="isaac"><datalist id="editor-id-list"></datalist></label>
+          </div>
+          <label>Password<input id="editor-pass" type="password" autocomplete="current-password"></label>
+          <div class="button-row"><button id="login-btn" class="admin-button success" type="button">Log in</button><button id="refresh-users-btn" class="admin-button ghost" type="button">Refresh users</button></div>
+          <p class="mini">The dropdown now loads every backend editor ID. You can still type an ID manually.</p><p id="backend-status" class="mini">Checking backend...</p>
+        </div>
+        <div id="logged-in-wrap" class="hidden">
+          <h2>Current editor</h2>
+          <p id="login-status" class="mini"></p>
+          <button id="logout-btn" class="admin-button ghost" type="button">Log out</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin-grid requires-login">
+      <nav class="admin-nav" aria-label="Admin sections">
+        <button data-panel="panel-start" class="active" type="button">Save & Publish</button>
+        <button data-panel="panel-users" type="button">Passwords & Abilities</button>
+        <button data-panel="panel-threat" type="button">Edit Matchup Responses</button>
+        <button data-panel="panel-tier" type="button">Edit Existing Tiers</button>
+        <button data-panel="panel-strategy" type="button">Strategy Database</button>
+        <button data-panel="panel-race-pages" type="button">TvT / PvP Lessons + Tests</button>
+        <button data-panel="panel-builds" type="button">Worst Builds</button>
+        <button data-panel="panel-feedback" type="button">Feedback & Ideas</button>
+      </nav>
+
+      <div class="admin-content">
+        <section id="panel-start" class="admin-card admin-panel active">
+          <h2>Save & Publish</h2>
+          <div id="role-summary"></div>
+          <div class="editor-help-card"><strong>How saves work</strong><p class="mini">Saves go to Netlify Blobs immediately. Public pages sync live through a throttled backend call. Download exports as backups or to move data between sites.</p></div>
+          <div class="save-strip">
+            <button id="export-js-btn" class="admin-button success" type="button">Download public JS backup</button>
+            <button id="export-json-btn" class="admin-button" type="button">Download admin JSON audit</button>
+            <button id="export-md-btn" class="admin-button" type="button">Download changelog markdown</button>
+            <button id="clear-local-btn" class="admin-button danger" type="button">Clear backend data</button>
+          </div>
+        </section>
+
+        <section id="panel-users" class="admin-card admin-panel">
+          <h2>Passwords & Abilities</h2>
+          <p class="mini">Owner-only. Load an existing editor to update abilities, or type a new editor ID to create one.</p>
+          <div class="admin-form">
+            <div class="form-grid three">
+              <label>Editor ID<input id="user-editor-id" placeholder="terran-helper"></label>
+              <label>Display name<input id="user-display-name" placeholder="Terran Helper"></label>
+              <label>New password<input id="user-password" type="password" autocomplete="new-password" placeholder="Leave blank to keep old password"></label>
+              <label>Role<select id="user-role"><option value="race-editor">race-editor</option><option value="reviewer">reviewer</option><option value="owner">owner</option></select></label>
+              <label>Race scope<select id="user-scope"><option>All</option><option>Zerg</option><option>Terran</option><option>Protoss</option></select></label>
+              <label>Change note<input id="user-note" placeholder="Added Terran editor"></label>
+            </div>
+            <div id="permission-checks" class="permission-checks"></div>
+            <div class="button-row">
+              <button id="save-user-btn" class="admin-button success" type="button">Save password / abilities</button>
+              <button id="delete-user-btn" class="admin-button danger" type="button">Delete editor ID</button>
+            </div>
+          </div>
+          <h3>Current users</h3>
+          <div id="user-list" class="user-list"></div>
+        </section>
+
+        <section id="panel-threat" class="admin-card admin-panel">
+          <h2>Edit Matchup Response</h2>
+          <p id="threat-role-notice" class="scope-lock"></p>
+          <p class="mini">Select races + threat. If a response already exists, the boxes fill automatically so editors can improve it instead of starting over.</p>
+          <div class="admin-form">
+            <div class="form-grid three">
+              <label>My Race<select id="threat-my-race"></select></label>
+              <label>Enemy Race<select id="threat-enemy-race"></select></label>
+              <label>My Position<select id="threat-position"></select></label>
+              <label>Enemy Threat<select id="threat-unit"></select></label>
+              <label>Existing row<select id="threat-existing"></select></label>
+              <label>Priority<select id="threat-priority"></select></label>
+              <label>Skillcap<select id="threat-skill"></select></label>
+              <label>Counter Unit 1<select id="counter-1"></select></label>
+              <label>Counter Unit 2<select id="counter-2"></select></label>
+              <label>Counter Unit 3<select id="counter-3"></select></label>
+              <label class="wide">Main response<textarea id="threat-response" placeholder="What should the player do?"></textarea></label>
+              <label>Scout timing<input id="threat-scout" placeholder="When to watch for it"></label>
+              <label>Response timing<input id="threat-timing" placeholder="When to switch/respond"></label>
+              <label class="wide">Avoid<textarea id="threat-avoid" placeholder="One avoid per line"></textarea></label>
+              <label class="wide">Warning<textarea id="threat-warning" placeholder="Optional warning"></textarea></label>
+              <label class="wide">Change note<input id="threat-note" placeholder="Updated Terran response to Lurker"></label>
+            </div>
+            <div class="button-row"><button id="save-threat-btn" class="admin-button success" type="button">Save matchup response</button><button id="clear-threat-form-btn" class="admin-button ghost" type="button">Clear text boxes</button></div>
+          </div>
+        </section>
+
+        <section id="panel-tier" class="admin-card admin-panel">
+          <h2>Edit Existing Tier Row</h2>
+          <p id="tier-role-notice" class="scope-lock"></p>
+          <p class="mini">Tier list unit count stays static. This only patches existing rows.</p>
+          <div class="admin-form">
+            <div class="form-grid three">
+              <label>Existing unit<select id="tier-unit"></select></label>
+              <label>Early tier<select id="tier-early"></select></label>
+              <label>Lategame tier<select id="tier-late"></select></label>
+              <label class="wide">Notes<textarea id="tier-notes"></textarea></label>
+              <label class="wide">Change note<input id="tier-note" placeholder="Fixed Terran early tier"></label>
+            </div>
+            <div class="button-row"><button id="save-tier-btn" class="admin-button success" type="button">Save tier patch</button></div>
+          </div>
+        </section>
+
+        <section id="panel-strategy" class="admin-card admin-panel">
+          <h2>Strategy Database</h2>
+          <p class="mini">Edit an existing community guide or create a new one. Existing guide data loads into the form.</p>
+          <div class="admin-form">
+            <label class="wide">Existing guide<select id="guide-existing"></select></label>
+            <div class="form-grid">
+              <label>Title<input id="guide-title" placeholder="How to punish early gas"></label>
+              <label>Race<select id="guide-race-edit"><option>Any</option><option>Zerg</option><option>Terran</option><option>Protoss</option></select></label>
+              <label>Matchup<input id="guide-matchup" placeholder="TvT, ZvP, Any"></label>
+              <label>Category<select id="guide-category-edit"></select></label>
+              <label class="wide">Summary<textarea id="guide-summary"></textarea></label>
+              <label class="wide">Guide body<textarea id="guide-body"></textarea></label>
+              <label>Tags<input id="guide-tags" placeholder="comma, separated, tags"></label>
+              <label>Change note<input id="guide-note" placeholder="Updated PvP archon guide"></label>
+            </div>
+            <div class="button-row"><button id="save-guide-btn" class="admin-button success" type="button">Save strategy guide</button><button id="new-guide-btn" class="admin-button ghost" type="button">New guide</button></div>
+          </div>
+        </section>
+
+        <section id="panel-race-pages" class="admin-card admin-panel">
+          <h2>TvT / PvP Lessons + Tests</h2>
+          <p class="mini">Select an existing lesson to update it. Add quiz questions below to make TvT and PvP work like the ZvZ trainer.</p>
+          <div class="admin-form">
+            <div class="form-grid">
+              <label>Page<select id="race-page"></select></label>
+              <label>Existing section<select id="race-page-existing"></select></label>
+              <label>Section order<input id="race-page-order" type="number" value="10" min="1"></label>
+              <label>Section title<input id="race-page-title" placeholder="Opening rules"></label>
+              <label>Category<input id="race-page-category" placeholder="Opening / Midgame / Lategame"></label>
+              <label>Priority<select id="race-page-priority"></select></label>
+              <label>Skill level<select id="race-page-skill"></select></label>
+              <label class="wide">Summary<textarea id="race-page-summary"></textarea></label>
+              <label class="wide">Body<textarea id="race-page-body"></textarea></label>
+              <label class="wide">Key points<textarea id="race-page-points" placeholder="One per line"></textarea></label>
+              <label class="wide">Common mistakes<textarea id="race-page-mistakes" placeholder="One per line"></textarea></label>
+            </div>
+            <h3>Small test questions</h3>
+            <div id="race-page-quiz-admin" class="quiz-admin-grid"></div>
+            <label class="wide">Change note<input id="race-page-note" placeholder="Added PvP disruptor quiz"></label>
+            <div class="button-row"><button id="save-race-page-btn" class="admin-button success" type="button">Save TvT/PvP section</button><button id="new-race-page-btn" class="admin-button ghost" type="button">New section</button></div>
+          </div>
+        </section>
+
+        <section id="panel-builds" class="admin-card admin-panel">
+          <h2>Worst Build Submissions</h2>
+          <p class="mini">Public users submit and vote from the Matchup Helper. This panel is for reviewing what came in.</p>
+          <div id="worst-build-admin-list" class="admin-list"></div>
+        </section>
+
+        <section id="panel-feedback" class="admin-card admin-panel">
+          <h2>Feedback & Site Ideas</h2>
+          <div class="admin-form">
+            <div class="form-grid">
+              <label>Type<select id="feedback-type"><option>Strategy gap</option><option>Bug</option><option>Design idea</option><option>Balance disagreement</option><option>SEO/social idea</option></select></label>
+              <label>Priority<select id="feedback-priority"></select></label>
+              <label class="wide">Feedback<textarea id="feedback-text"></textarea></label>
+              <label class="wide">Change note<input id="feedback-note" placeholder="Reported missing TvT Thor note"></label>
+            </div>
+            <div class="button-row"><button id="save-feedback-btn" class="admin-button success" type="button">Save feedback</button></div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="admin-preview">
+        <div class="admin-card"><h2>Live Preview</h2><div id="live-preview" class="live-preview-box mini">Select a row or save a change to preview it here.</div></div>
+        <div class="admin-card"><h2>Visible Changelog</h2><div id="changelog-list" class="changelog-list"></div></div>
+      </aside>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="js/main.js"></script>
+  <script src="js/data-units.js"></script>
+  <script src="js/data-tierlist.js"></script>
+  <script src="js/data-matchups.js"></script>
+  <script src="js/data-strategy-guides.js"></script>
+  <script src="js/data-admin-users.js"></script>
+  <script src="js/data-admin-schema.js"></script>
+  <script src="js/data-community-additions.js"></script>
+  <script src="js/community-data-bridge.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

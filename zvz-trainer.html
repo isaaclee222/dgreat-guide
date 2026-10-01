@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ZvZ | dgreat.guide</title>
+  <meta name="description" content="Separated learning and quiz screens for the current ZvZ Muta opener meta.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme-synthwave.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header"></header>
+
+  <main id="main" class="container">
+    <section class="section">
+      <span class="eyebrow">ZvZ</span>
+      <h1 class="page-title">Muta dominates the early mirror. Learn it, then prove it.</h1>
+      <p class="lede">Read the lesson. Then switch to the quiz screen where the lesson is no longer visible.</p>
+      <div class="screen-switch" role="group" aria-label="ZvZ trainer screens">
+        <button id="show-zvz-learn" class="button-secondary" type="button" aria-pressed="true">Learn</button>
+        <button id="start-zvz-quiz" class="button-primary" type="button" aria-pressed="false">Start quiz</button>
+      </div>
+    </section>
+
+    <section id="zvz-learn-screen" class="section zvz-screen">
+      <div class="learning-grid">
+        <article class="card-success">
+          <span class="eyebrow">Main lesson</span>
+          <h2>Muta dominates the early mirror.</h2>
+          <p>The first 6 rounds are usually Muta-focused. Your first job is to avoid losing the Muta phase so hard that every later transition is late.</p>
+          <p>Sometimes skipping round 2 is correct if it helps you hit the right Muta timing. Early Infestor and early Queen are not reliable main answers.</p>
+        </article>
+        <aside class="card-conditional">
+          <h3>Transition checklist</h3>
+          <ul class="list-clean">
+            <li>If enemy Viper wins value, switch Hydra and add your own Viper.</li>
+            <li>If enemy goes Ultra, transition to Ultra also.</li>
+            <li>Sell Mutas if needed to afford T3 before round start.</li>
+            <li>Hydra by minute 7 is still usually correct.</li>
+            <li>Lategame is often dominated by Ultra or Lurker.</li>
+          </ul>
+        </aside>
+      </div>
+      <section class="section">
+        <h2>What to know</h2>
+        <div id="zvz-facts" class="card-grid"></div>
+      </section>
+    </section>
+
+    <section id="zvz-quiz-screen" class="section tool-panel zvz-screen" hidden>
+      <div id="zvz-progress" class="quiz-progress"></div>
+      <div class="progress-bar"><span id="zvz-progress-bar"></span></div>
+      <div id="zvz-card" class="card"></div>
+    </section>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+  <script src="js/main.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/synthwave-bg.js"></script>
+  <script src="js/data-quizzes.js"></script>
+  <script src="js/zvz-trainer.js"></script>
+</body>
+</html>

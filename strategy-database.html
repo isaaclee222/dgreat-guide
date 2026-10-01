@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Strategy Database | dgreat.guide</title>
+  <meta name="description" content="Community-built Direct Strike strategy guides, timing notes, counter guides, and matchup explanations.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme-synthwave.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header"></header>
+  <main id="main" class="container">
+    <section class="section page-hero compact-hero">
+      <span class="eyebrow">Strategy database</span>
+      <h1 class="page-title">The Direct Strike strategy archive. Field-tested, no filler.</h1>
+      <p class="lede">Admin editors can add community strategy guides without changing the original data file formats. Published additions appear here after replacing <code>js/data-community-additions.js</code>.</p>
+    </section>
+
+    <section class="section tool-panel">
+      <div class="strategy-filters">
+        <div class="control-group"><label for="strategy-race">Race</label><select id="strategy-race"></select></div>
+        <div class="control-group"><label for="strategy-category">Category</label><select id="strategy-category"></select></div>
+        <div class="control-group wide-control"><label for="strategy-search">Search</label><input id="strategy-search" type="search" placeholder="storm, muta, mech, wave 3..."></div>
+      </div>
+      <div id="strategy-guide-list" class="strategy-guide-list"></div>
+    </section>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+  <script src="js/main.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/synthwave-bg.js"></script>
+  <script src="js/data-strategy-guides.js"></script>
+  <script src="js/data-community-additions.js"></script>
+  <script src="js/community-data-bridge.js"></script>
+  <script src="js/strategy-database.js"></script>
+</body>
+</html>

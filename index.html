@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>dgreat.guide | Direct Strike</title>
+  <meta name="description" content="Direct Strike reference and matchup tools. Built by players who've been here long enough to stop guessing.">
+  <script src="js/visit-router.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme-synthwave.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header"></header>
+
+  <main id="main" class="container">
+    <section class="hero command-hero">
+      <div>
+        <span class="eyebrow">Direct Strike reference</span>
+        <h1>dgreat.guide</h1>
+        <p class="lede">Matchup data, counter logic, and tier rankings. No filler. Built for players who understand that this game takes longer to learn than it looks.</p>
+        <div class="hero-actions">
+          <a class="button-primary" href="start.html">Start Here</a>
+          <a class="button-secondary" href="matchup-helper.html">Matchup Helper</a>
+          <a class="button-secondary" href="tier-list.html">Tier List</a>
+        </div>
+      </div>
+      <aside class="hero-panel command-panel" aria-label="Direct Strike decision framework">
+        <div class="command-row"><span class="command-key">1</span><div><strong>Stabilize first</strong><br><span class="section-intro">Spend minerals on this wave. Gas is a tomorrow problem.</span></div><span class="command-status">STABLE</span></div>
+        <div class="command-row"><span class="command-key">2</span><div><strong>Read the threat</strong><br><span class="section-intro">Identify what is actually killing you before you switch.</span></div><span class="command-status">SCOUT</span></div>
+        <div class="command-row"><span class="command-key">3</span><div><strong>Hard counter</strong><br><span class="section-intro">The right response. Not the panic response.</span></div><span class="command-status">EXECUTE</span></div>
+        <div class="stat-grid">
+          <div class="stat-card"><strong>HT</strong><span>Storm value check</span></div>
+          <div class="stat-card"><strong>ZvZ</strong><span>Muta phase priority</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section race-quickstart-section" aria-label="Quick race jump">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Your race</span>
+          <h2>Where do you want to start?</h2>
+          <p class="section-intro">Opens the matchup helper pre-filtered. No extra clicks.</p>
+        </div>
+      </div>
+      <div class="race-quickstart">
+        <a class="race-btn race-btn-zerg" href="matchup-helper.html?race=Zerg">
+          <span class="race-btn-icon">🟣</span>
+          <span class="race-label">Zerg</span>
+          <span class="race-desc">Mutas, Roaches, Hydras, Lurkers</span>
+        </a>
+        <a class="race-btn race-btn-terran" href="matchup-helper.html?race=Terran">
+          <span class="race-btn-icon">🔵</span>
+          <span class="race-label">Terran</span>
+          <span class="race-desc">Marines, Tanks, Libs, Battlecruisers</span>
+        </a>
+        <a class="race-btn race-btn-protoss" href="matchup-helper.html?race=Protoss">
+          <span class="race-btn-icon">🟡</span>
+          <span class="race-label">Protoss</span>
+          <span class="race-desc">Stalkers, HT Storm, Colossi, Carriers</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section path-strip" aria-label="Recommended learning path">      <article class="card path-step" data-step="01">
+        <h3>Get the fundamentals right</h3>
+        <p>Wave strength, gas timing, mid control. Everything else is downstream of these three.</p>
+      </article>
+      <article class="card path-step" data-step="02">
+        <h3>Use the tools live</h3>
+        <p>Set your race and position, then identify the unit that is actually killing your wave. Not the one you assume.</p>
+      </article>
+      <article class="card path-step" data-step="03">
+        <h3>Test your reads</h3>
+        <p>Quiz your gas and ZvZ calls on a separate screen. No answer sheet visible.</p>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <h2>Reference tools</h2>
+          <p class="section-intro">Built to use during or between games. Not just read once.</p>
+        </div>
+      </div>
+      <div id="tool-card-grid" class="card-grid"></div>
+    </section>
+
+    <section class="section" id="noob-trap-detector"></section>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+  <script src="js/main.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/synthwave-bg.js"></script>
+</body>
+</html>
